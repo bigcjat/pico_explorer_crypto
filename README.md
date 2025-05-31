@@ -11,7 +11,7 @@ A MicroPython project for the Raspberry Pi Pico W and Pimoroni Pico Explorer Bas
 - **Approximate Volume:** Shows the trading volume for the period covered by the chart.
 - **Asset Switching:** Use the A, B, X, and Y buttons on the Pico Explorer Base to switch between pre-configured cryptocurrencies (XRP, BTC, ETH, JASMY by default).
 - **Dynamic Price Color:** The current price text changes color to indicate if the price has gone up (green), down (red), or stayed the same (white) since the last update.
-- **Automatic Refresh:** Data automatically refreshes every 30 seconds (configurable).
+- **Automatic Refresh:** Data automatically refreshes every second (configurable).
 - **Clear Visual Interface:** Uses the Pico Explorer's LCD screen with a clean, color-coded layout.
 
 ## Hardware Requirements
