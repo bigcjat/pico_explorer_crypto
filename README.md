@@ -1,95 +1,94 @@
-Pico W Crypto Price & Chart Dashboard
+# Pico W Crypto Price & Chart Dashboard
+
 A MicroPython project for the Raspberry Pi Pico W and Pimoroni Pico Explorer Base that displays real-time cryptocurrency price information, a candlestick chart, and 5-minute interval volume for selected assets. Users can switch between different cryptocurrencies using the onboard buttons.
 
+*(Suggestion: Add a photo of your project in action here!)*
 
-(Suggestion: Replace the placeholder above with an actual photo of your project in action!)
+## Features
 
-Features
-Real-time Price Display: Shows the current price of the selected cryptocurrency.
+- **Real-time Price Display:** Shows the current price of the selected cryptocurrency.
+- **Candlestick Chart:** Displays a 5-minute interval candlestick chart for the selected asset, showing recent price action (Open, High, Low, Close).
+- **Approximate Volume:** Shows the trading volume for the period covered by the chart.
+- **Asset Switching:** Use the A, B, X, and Y buttons on the Pico Explorer Base to switch between pre-configured cryptocurrencies (XRP, BTC, ETH, JASMY by default).
+- **Dynamic Price Color:** The current price text changes color to indicate if the price has gone up (green), down (red), or stayed the same (white) since the last update.
+- **Automatic Refresh:** Data automatically refreshes every 30 seconds (configurable).
+- **Clear Visual Interface:** Uses the Pico Explorer's LCD screen with a clean, color-coded layout.
 
-Candlestick Chart: Displays a 5-minute interval candlestick chart for the selected asset, showing recent price action (Open, High, Low, Close).
+## Hardware Requirements
 
-Approximate Volume: Shows the trading volume for the period covered by the chart.
+- Raspberry Pi Pico W
+- Pimoroni Pico Explorer Base
+- Micro USB cable for power and programming
 
-Asset Switching: Use the A, B, X, and Y buttons on the Pico Explorer Base to switch between pre-configured cryptocurrencies (XRP, BTC, ETH, JASMY by default).
+## Software Requirements
 
-Dynamic Price Color: The current price text changes color to indicate if the price has gone up (green), down (red), or stayed the same (white) since the last update.
+- MicroPython firmware for the Raspberry Pi Pico W (Pimoroni's custom UF2 is recommended).
+- Thonny IDE (or any other MicroPython-compatible IDE).
+- The following MicroPython libraries (usually included in Pimoroni's firmware, but may need to be installed via Thonny's package manager if using standard MicroPython):
+    - `urequests`
+    - `ujson` (likely already included in the firmware)
 
-Automatic Refresh: Data automatically refreshes every 30 seconds (configurable).
+## Setup & Installation
 
-Clear Visual Interface: Uses the Pico Explorer's LCD screen with a clean, color-coded layout.
+1.  **Flash MicroPython:**
+    - Ensure your Raspberry Pi Pico W has MicroPython flashed. Pimoroni's custom UF2 file is recommended: [Pimoroni MicroPython Releases](https://github.com/pimoroni/pimoroni-pico/releases).
+    - To flash, hold BOOTSEL on the Pico W while plugging it into your computer. Drag the UF2 file onto the `RPI-RP2` drive.
 
-Hardware Requirements
-Raspberry Pi Pico W
+2.  **Connect Hardware:**
+    - If not already done, solder headers to your Pico W.
+    - Securely attach the Pico W to the Pimoroni Pico Explorer Base.
 
-Pimoroni Pico Explorer Base
+3.  **Install Libraries (if needed):**
+    - Open Thonny IDE and connect to your Pico W.
+    - If not using Pimoroni's custom firmware, you might need to install libraries. Go to **Tools > Manage Packages...**, search for `micropython-urequests` and `micropython-ujson`, and install them.
 
-Micro USB cable for power and programming
+4.  **Configure WiFi Credentials:**
+    - Open the `main.py` script in Thonny.
+    - Update `WIFI_SSID` and `WIFI_PASSWORD` with your network details.
 
-Software Requirements
-MicroPython firmware for the Raspberry Pi Pico W (Pimoroni's custom UF2 is recommended as it includes necessary libraries).
+5.  **Upload Code:**
+    - Save the `main.py` script to your Raspberry Pi Pico W. It will run automatically on boot.
 
-Thonny IDE (or any other MicroPython-compatible IDE) for uploading code to the Pico W.
+## How to Use
 
-The following MicroPython libraries (usually included in Pimoroni's firmware, but may need to be installed via Thonny's package manager if using standard MicroPython):
+1.  **Power On:** Connect the Pico W to USB power.
+2.  **Initial Connection:** The screen shows "Connecting...".
+3.  **Select Asset:** Then "Press A,B,X,Y".
+    - **Button A (Pin 12):** Asset 1 (default: XRP)
+    - **Button B (Pin 13):** Asset 2 (default: BTC)
+    - **Button X (Pin 14):** Asset 3 (default: ETH)
+    - **Button Y (Pin 15):** Asset 4 (default: JASMY)
+4.  **View Data:** The screen displays the chart, price, and volume.
+5.  **Automatic Refresh:** Data refreshes per `CRYPTO_REFRESH_INTERVAL`. A countdown is shown.
+6.  **Switching Assets:** Press a different button at any time.
 
-urequests (for making HTTP API calls)
+## Customizing Assets
 
-ujson (for parsing JSON API responses)
+Edit the `ASSETS` list in `main.py`:
 
-Setup & Installation
-Flash MicroPython:
+    ASSETS = [
+        {"name": "XRP", "symbol": "XRPUSDT", "price_format": "${:.4f}"},
+        {"name": "BTC", "symbol": "BTCUSDT", "price_format": "${:.2f}"}, 
+        {"name": "ETH", "symbol": "ETHUSDT", "price_format": "${:.2f}"}, 
+        {"name": "JASMY", "symbol": "JASMYUSDT", "price_format": "${:.6f}"}
+    ]
 
-Ensure your Raspberry Pi Pico W has MicroPython flashed. It's highly recommended to use the custom Pimoroni MicroPython UF2 file, as it often includes necessary drivers and libraries.
+- `name`: Display name.
+- `symbol`: Binance API symbol (e.g., "XRPUSDT").
+- `price_format`: Python f-string for price display.
 
-To flash, hold the BOOTSEL button on the Pico W while plugging it into your computer. It will appear as a USB drive. Drag the UF2 file onto this drive. The Pico W will reboot.
+## Code Structure Overview
 
-Connect Hardware:
+- **Configuration:** WiFi, API settings, asset definitions.
+- **Initialization:** Display, pens (colors), buttons.
+- **API/Network Functions:** `connect_wifi()`, `get_market_data()`.
+- **Display Functions:** Formatting, status messages, chart drawing, main dashboard drawing, countdown timer.
+- **Main Program Loop:** Handles WiFi, initial asset selection, button inputs, periodic data refresh, and screen updates.
 
-If not already done, solder headers to your Pico W.
+## Troubleshooting
 
-Securely attach the Pico W to the Pimoroni Pico Explorer Base.
-
-Install Libraries (if needed):
-
-Open Thonny IDE.
-
-Connect to your Pico W (Interpreter set to "MicroPython (Raspberry Pi Pico)").
-
-If you are not using Pimoroni's custom firmware, you might need to install urequests and ujson. Go to Tools > Manage Packages..., search for micropython-urequests and micropython-ujson, and install them.
-
-Configure WiFi Credentials:
-
-Open the main.py script in Thonny.
-
-Locate the "CONFIGURE YOUR DETAILS HERE" section at the top of the script.
-
-Update the WIFI_SSID and WIFI_PASSWORD variables with your Wi-Fi network name and password:
-
-WIFI_SSID = "SSID-HERE"
-WIFI_PASSWORD = "PASSWORD-HERE"
-
-Upload Code:
-
-Save the main.py script to your Raspberry Pi Pico W. If you save it as main.py, it will run automatically when the Pico W is powered on.
-
-How to Use
-Power On: Connect the Pico W (attached to the Explorer Base) to a USB power source.
-
-Initial Connection: The screen will display "Connecting..." while it connects to your Wi-Fi network.
-
-Select Asset: Once connected, it will display "Press A,B,X,Y".
-
-Button A (Pin 12): Selects the first asset in the ASSETS list (default: XRP).
-
-Button B (Pin 13): Selects the second asset (default: BTC).
-
-Button X (Pin 14): Selects the third asset (default: ETH).
-
-Button Y (Pin 15): Selects the fourth asset (default: JASMY).
-
-View Data: The screen will display the candlestick chart, current price, and volume for the selected asset.
-
-Automatic Refresh: The data for the currently displayed asset will refresh automatically every 30 seconds (or as configured by CRYPTO_REFRESH_INTERVAL). A countdown timer is shown at the bottom of the screen.
-
-Switching Assets: You can press a different button at any time to switch to
+- **"WiFi Failed!"**: Check SSID/password, 2.4GHz network.
+- **"API Error" / "N/A" data**: Check internet, asset symbols in `ASSETS`, or try increasing `CRYPTO_REFRESH_INTERVAL`.
+- **Buttons not working**: Verify pin numbers in the script (12, 13, 14, 15) match your board if it's not a standard Pico Explorer, and check soldering/seating.
+- **Crashes**: Ensure all necessary libraries (`urequests`, `ujson`) are present if not using Pimoroni's UF2. Check REPL in Thonny for specific error messages.
+- **ujson**: If this library wont install, it's likely already included in the firmware you have installed.
