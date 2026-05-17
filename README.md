@@ -2,7 +2,6 @@
 
 A MicroPython project for the Raspberry Pi Pico W and Pimoroni Pico Explorer Base that displays real-time cryptocurrency price information, a candlestick chart, and 5-minute interval volume for selected assets. Users can switch between different cryptocurrencies using the onboard buttons.
 
-*(Suggestion: Add a photo of your project in action here!)*
 
 ## Features
 
